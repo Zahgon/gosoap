@@ -1,14 +1,8 @@
 package gosoap
 
 import (
-	"encoding/xml"
-	"fmt"
 	"io"
 	"net/http"
-	"net/url"
-	"os"
-
-	"golang.org/x/net/html/charset"
 )
 
 type wsdlDefinitions struct {
@@ -158,56 +152,22 @@ type xsdMaxInclusive struct {
 }
 
 func getWsdlBody(u string, c *http.Client) (reader io.ReadCloser, err error) {
-	parse, err := url.Parse(u)
-	if err != nil {
-		return nil, err
-	}
-	if parse.Scheme == "file" {
-		outFile, err := os.Open(parse.Path)
-		if err != nil {
-			return nil, err
-		}
-		return outFile, nil
-	}
-	if c == nil {
-		c = &http.Client{}
-	}
-	r, err := c.Get(u)
-	if err != nil {
-		return nil, err
-	}
-	return r.Body, nil
+	_ = "STUB: not implemented"
+	return *new(io.ReadCloser), nil
 }
 
 // getWsdlDefinitions sent request to the wsdl url and set definitions on struct
 func getWsdlDefinitions(u string, c *http.Client) (wsdl *wsdlDefinitions, err error) {
-	reader, err := getWsdlBody(u, c)
-	if err != nil {
-		return nil, err
-	}
-	defer reader.Close()
-
-	decoder := xml.NewDecoder(reader)
-	decoder.CharsetReader = charset.NewReaderLabel
-	err = decoder.Decode(&wsdl)
-
-	return wsdl, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // the SoapAction of an operation might differ from the action wsdl-operation name
 // if any SoapAction name is set in the wsdlOperation binding, use that.
 func (wsdl *wsdlDefinitions) GetSoapActionFromWsdlOperation(operation string) string {
+	_ = "STUB: not implemented"
 	// in the future it would be nice to have Operations be map[string]*wsdlOperation,
 	// where the map key is the wsdlOperation name
-	if wsdl.Bindings[0] != nil {
-		for _, o := range wsdl.Bindings[0].Operations {
-			if o.Name == operation {
-				if len(o.SoapOperations) > 0 && o.SoapOperations[0] != nil {
-					return o.SoapOperations[0].SoapAction
-				}
-			}
-		}
-	}
 	return ""
 }
 
@@ -219,6 +179,4 @@ type Fault struct {
 	Detail      string `xml:"detail"`
 }
 
-func (f *Fault) String() string {
-	return fmt.Sprintf("[%s]: %s | Detail: %s", f.Code, f.Description, f.Detail)
-}
+func (f *Fault) String() string { _ = "STUB: not implemented"; return "" }
